@@ -10,6 +10,7 @@ import org.codenarc.idea.CodeNarcInspectionTool;
 import org.codenarc.rule.Violation;
 import org.codenarc.rule.unused.UnusedVariableRule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.groovy.codeInspection.fixes.RemoveElementQuickFix;
 
 @Generated("You can customize this class at the end of the file or remove this annotation to skip regeneration completely")
 public class UnusedVariableInspectionTool extends CodeNarcInspectionTool<UnusedVariableRule> {
@@ -59,7 +60,7 @@ public class UnusedVariableInspectionTool extends CodeNarcInspectionTool<UnusedV
 
     @Override
     protected @NotNull Collection<LocalQuickFix> getQuickFixesFor(Violation violation, PsiElement violatingElement) {
-        return Collections.singleton(new DeleteElementFix(violatingElement));
+        return Collections.singleton(new RemoveElementQuickFix(violatingElement.getText()));
     }
 
 }

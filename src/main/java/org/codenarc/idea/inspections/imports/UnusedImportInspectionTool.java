@@ -11,6 +11,7 @@ import org.codenarc.idea.CodeNarcInspectionTool;
 import org.codenarc.rule.Violation;
 import org.codenarc.rule.imports.UnusedImportRule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.groovy.codeInspection.fixes.RemoveElementQuickFix;
 
 @Generated("You can customize this class at the end of the file or remove this annotation to skip regeneration completely")
 public class UnusedImportInspectionTool extends CodeNarcInspectionTool<UnusedImportRule> implements CleanupLocalInspectionTool {
@@ -33,7 +34,7 @@ public class UnusedImportInspectionTool extends CodeNarcInspectionTool<UnusedImp
 
     @Override
     protected @NotNull Collection<LocalQuickFix> getQuickFixesFor(Violation violation, PsiElement violatingElement) {
-        return Collections.singleton(new DeleteElementFix(violatingElement));
+        return Collections.singleton(new RemoveElementQuickFix(violatingElement.getText()));
     }
 
 }

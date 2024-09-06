@@ -1,27 +1,29 @@
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
 plugins {
-    id 'org.jetbrains.intellij' version '1.15.0'
+    id 'org.jetbrains.intellij.platform' version '2.0.1'
     id 'java'
     id 'idea'
     id 'groovy'
     id 'application'
 }
 
-if (!project.hasProperty('publishPluginChannels')) ext.publishPluginChannels = ''
-if (!project.hasProperty('publishPluginToken')) ext.publishPluginToken = '**UNDEFINED**'
-if (!project.hasProperty('ideVersion')) ext.ideVersion = 'IC-2023.2'
-
 wrapper {
-    gradleVersion = '8.0.2'
+    gradleVersion = '8.10'
     distributionType = Wrapper.DistributionType.ALL
     // Checksums are found here: https://gradle.org/release-checksums/
-    distributionSha256Sum = '47a5bfed9ef814f90f8debcbbb315e8e7c654109acd224595ea39fca95c5d4da'
+    distributionSha256Sum = '682b4df7fe5accdca84a4d1ef6a3a6ab096b3efd5edf7de2bd8c758d95a93703'
 }
 
 group 'org.codenarc.idea'
 version "${pluginVersion}"
+String idePlatformVersion = '2024.2.0.1'
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 idea {
@@ -47,6 +49,18 @@ configurations {
 }
 
 dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity idePlatformVersion
+
+        bundledPlugin 'com.intellij.java'
+        bundledPlugin 'org.intellij.groovy'
+
+        pluginVerifier()
+        zipSigner()
+        instrumentationTools()
+
+        testFramework TestFrameworkType.Platform.INSTANCE
+    }
     compileOnly( 'org.apache.groovy:groovy') {
         version {
             strictly "$groovyVersion"
@@ -88,35 +102,39 @@ dependencies {
     }
 }
 
-String idePlatformVersion = "${ideVersion}"
-
 logger.lifecycle("Using IDE version $idePlatformVersion")
 
-intellij {
-    pluginName = 'CodeNarc'
-
-    downloadSources = !providers.environmentVariable('CI').forUseAtConfigurationTime().present
-    plugins = ['Groovy', 'gradle', 'java']
-    version = idePlatformVersion
-    instrumentCode = false
-}
-
-publishPlugin {
-    token = publishPluginToken
-    if (publishPluginChannels) {
-        channels = Arrays.asList(publishPluginChannels.split(','))
+intellijPlatform {
+    pluginConfiguration {
+        name = 'CodeNarc'
     }
 }
 
+//intellij {
+//    pluginName = 'CodeNarc'
+//
+//    downloadSources = !providers.environmentVariable('CI').forUseAtConfigurationTime().present
+//    plugins = ['Groovy', 'gradle', 'java']
+//    version = idePlatformVersion
+//    instrumentCode = false
+//}
+//
+//publishPlugin {
+//    token = publishPluginToken
+//    if (publishPluginChannels) {
+//        channels = Arrays.asList(publishPluginChannels.split(','))
+//    }
+//}
+
 runIde {
-    jvmArgs "-Xmx2g"
+    jvmArgs '-Xmx2g'
 }
 
-runPluginVerifier {
-    ideVersions = [
-            idePlatformVersion
-    ]
-}
+//runPluginVerifier {
+//    ideVersions = [
+//            idePlatformVersion
+//    ]
+//}
 
 patchPluginXml {
     version "${pluginVersion}"
