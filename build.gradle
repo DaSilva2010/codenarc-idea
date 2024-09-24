@@ -105,39 +105,18 @@ dependencies {
 logger.lifecycle("Using IDE version $idePlatformVersion")
 
 intellijPlatform {
+
     pluginConfiguration {
         name = 'CodeNarc'
+        version = pluginVersion
     }
 }
-
-//intellij {
-//    pluginName = 'CodeNarc'
-//
-//    downloadSources = !providers.environmentVariable('CI').forUseAtConfigurationTime().present
-//    plugins = ['Groovy', 'gradle', 'java']
-//    version = idePlatformVersion
-//    instrumentCode = false
-//}
-//
-//publishPlugin {
-//    token = publishPluginToken
-//    if (publishPluginChannels) {
-//        channels = Arrays.asList(publishPluginChannels.split(','))
-//    }
-//}
 
 runIde {
     jvmArgs '-Xmx2g'
 }
 
-//runPluginVerifier {
-//    ideVersions = [
-//            idePlatformVersion
-//    ]
-//}
-
 patchPluginXml {
-    version "${pluginVersion}"
     sinceBuild = '223.7571.182'
     untilBuild = null
     changeNotes = file('changelog.html').text
