@@ -1,7 +1,7 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    id 'org.jetbrains.intellij.platform' version '2.0.1'
+    id 'org.jetbrains.intellij.platform' version '2.1.0'
     id 'java'
     id 'idea'
     id 'groovy'
@@ -17,7 +17,7 @@ wrapper {
 
 group 'org.codenarc.idea'
 version "${pluginVersion}"
-String idePlatformVersion = '2024.2.0.1'
+String idePlatformVersion = '2024.3'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ repositories {
 
 idea {
     project {
-        jdkName = '17'
+        jdkName = 'temurin-21'
     }
 }
 
@@ -117,7 +117,7 @@ runIde {
 }
 
 patchPluginXml {
-    sinceBuild = '223.7571.182'
+    sinceBuild = '243.21565.193'
     untilBuild = null
     changeNotes = file('changelog.html').text
     pluginDescription = file('description.html').text
@@ -125,6 +125,11 @@ patchPluginXml {
 
 application {
     mainClassName = 'org.codenarc.idea.gen.RuleInspectionsGenerator'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 run {

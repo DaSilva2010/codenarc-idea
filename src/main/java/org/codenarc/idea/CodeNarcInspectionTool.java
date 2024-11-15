@@ -275,9 +275,8 @@ public abstract class CodeNarcInspectionTool<R extends AbstractRule> extends Loc
                     return false;
                 }
 
-                if (o1 instanceof InjectionAwareSuppressQuickFix && o2 instanceof InjectionAwareSuppressQuickFix) {
-                    if (((InjectionAwareSuppressQuickFix)o1).isShouldBeAppliedToInjectionHost() !=
-                            ((InjectionAwareSuppressQuickFix)o2).isShouldBeAppliedToInjectionHost()) {
+                if (o1 instanceof InjectionAwareSuppressQuickFix iasqf1 && o2 instanceof InjectionAwareSuppressQuickFix iasqf2) {
+                    if (iasqf1.isShouldBeAppliedToInjectionHost() != iasqf2.isShouldBeAppliedToInjectionHost()) {
                         return false;
                     }
                 }
@@ -285,10 +284,10 @@ public abstract class CodeNarcInspectionTool<R extends AbstractRule> extends Loc
             }
         });
 
-        Set<InspectionSuppressor> suppressors = getSuppressors(element);
+        Collection<InspectionSuppressor> suppressors = getSuppressors(element);
         final PsiLanguageInjectionHost injectionHost = InjectedLanguageManager.getInstance(element.getProject()).getInjectionHost(element);
         if (injectionHost != null) {
-            Set<InspectionSuppressor> injectionHostSuppressors = getSuppressors(injectionHost);
+            Collection<InspectionSuppressor> injectionHostSuppressors = getSuppressors(injectionHost);
             for (InspectionSuppressor suppressor : injectionHostSuppressors) {
                 addAllSuppressActions(fixes, injectionHost, suppressor, ThreeState.YES, getAlternativeID());
             }
